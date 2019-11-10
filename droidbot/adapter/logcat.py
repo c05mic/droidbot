@@ -26,7 +26,10 @@ class Logcat(Adapter):
             self.out_file = "%s/logcat.txt" % device.output_dir
 
     def connect(self):
-        self.device.adb.run_cmd("logcat -c")
+        try:
+            self.device.adb.run_cmd("logcat -c")
+        except subprocess.CalledProcessError as e:
+            self.logger.warning("Could not clear logcat buffers")
         self.process = subprocess.Popen(["adb", "-s", self.device.serial, "logcat", "-v", "threadtime"],
                                         stdin=subprocess.PIPE,
                                         stderr=subprocess.PIPE,
