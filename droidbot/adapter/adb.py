@@ -342,13 +342,7 @@ class ADB(Adapter):
         (x0, y0) = self.__transform_point_by_orientation((x0, y0), orientation, self.get_orientation())
         (x1, y1) = self.__transform_point_by_orientation((x1, y1), orientation, self.get_orientation())
 
-        version = self.get_sdk_version()
-        if version <= 15:
-            self.logger.error("drag: API <= 15 not supported (version=%d)" % version)
-        elif version <= 17:
-            self.shell("input swipe %d %d %d %d" % (x0, y0, x1, y1))
-        else:
-            self.shell("input touchscreen swipe %d %d %d %d %d" % (x0, y0, x1, y1, duration))
+        self.shell("input touchscreen swipe %d %d %d %d %d" % (x0, y0, x1, y1, duration))
 
     def type(self, text):
         if isinstance(text, str):
