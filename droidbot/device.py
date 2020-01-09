@@ -27,7 +27,7 @@ class Device(object):
 
     def __init__(self, device_serial=None, is_emulator=False, output_dir=None,
                  cv_mode=False, grant_perm=False, telnet_auth_token=None,
-                 enable_accessibility_hard=False, humanoid=None, ignore_ad=False):
+                 enable_accessibility_hard=False, humanoid=None, ignore_ad=False, should_take_screenshots=False):
         """
         initialize a device connection
         :param device_serial: serial number of target device
@@ -49,6 +49,7 @@ class Device(object):
         self.is_emulator = is_emulator
         self.cv_mode = cv_mode
         self.output_dir = output_dir
+        self.should_take_screenshots = should_take_screenshots
         if output_dir is not None:
             if not os.path.isdir(output_dir):
                 os.makedirs(output_dir)
@@ -804,7 +805,7 @@ class Device(object):
             foreground_activity = self.get_top_activity_name()
             activity_stack = self.get_current_activity_stack()
             background_services = self.get_service_names()
-            screenshot_path = self.take_screenshot()
+            screenshot_path = self.take_screenshot() if self.should_take_screenshots else None
             self.logger.debug("finish getting current device state...")
             from .device_state import DeviceState
             current_state = DeviceState(self,
